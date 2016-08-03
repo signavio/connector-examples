@@ -16,7 +16,13 @@ app.get("/:type/options", function(req, res) {
         return res.status(404).send();
     }
 
-    res.json(_.map(data[type], function(value) {
+    const query = req.query.filter || "";
+
+    const options = _.filter(data[type], function(value) {
+        return _.includes(value.fullName.toLowerCase(), query.toLowerCase());
+    });
+
+    res.json(_.map(options, function(value) {
         return {
             id: value.id,
             name: value.fullName,
