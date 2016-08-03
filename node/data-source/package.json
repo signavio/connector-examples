@@ -1,0 +1,24 @@
+{
+  "name": "data-source",
+  "version": "1.0.0",
+  "description": "An example data source for Signavio Workflow written in node.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/effektif/connector-examples.git"
+  },
+  "author": "Philipp Giese",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/effektif/connector-examples/issues"
+  },
+  "homepage": "https://github.com/effektif/connector-examples#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "lodash": "^4.14.1"
+  }
+}
