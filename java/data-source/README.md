@@ -6,14 +6,6 @@ You can find both [descriptor](/java/data-source/src/main/resource/descriptor.js
 ## Requirements
 In order to run this example, you need to have [Java 8](https://www.java.com/) and [Maven 3.x](http://maven.apache.org/) installed on your machine.
 
-## Setup
-
-You first need to install all dependencies for this connector:
-
-```shell
-pip install -r requirements
-```
-
 ## Run the server
 
 To run the server type:
