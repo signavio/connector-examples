@@ -1,6 +1,6 @@
 # Custom data source
 
-This connector is an example of a custom data source, which provides customer information.
+This connector is an example of a custom data source, which provides customer information, implemented with the [Play Framework](https://www.playframework.com).
 The data source and test data are constructed in the code.
 
 ## Requirements
