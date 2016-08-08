@@ -96,8 +96,8 @@ func descriptor(response http.ResponseWriter, request *http.Request)  {
 func main() {
 	load();
 	http.HandleFunc("/", descriptor)
-	http.HandleFunc("/customers/options", options)
-	http.HandleFunc("/customers/", customer)
+	http.HandleFunc("/customer/options", options)
+	http.HandleFunc("/customer/", customer)
 	println("Listening on " + address)
 	panic(http.ListenAndServe(address, nil))
 }
