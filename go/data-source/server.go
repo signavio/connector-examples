@@ -12,6 +12,11 @@ import (
 
 var address = ":9000"
 
+type Option struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 type Customer struct {
 	Id               string `json:"id"`
 	FullName         string `json:"fullName"`
@@ -52,7 +57,7 @@ func findOne(id string) (Customer, bool) {
 
 // Serves a single customer.
 func customer(response http.ResponseWriter, request *http.Request) {
-	id := strings.TrimPrefix(request.URL.Path, "/customers/")
+	id := strings.TrimPrefix(request.URL.Path, "/customer/")
 	customer, found := findOne(id)
 	if found {
 		json, _ := json.MarshalIndent(customer, "", "  ")
@@ -64,11 +69,12 @@ func customer(response http.ResponseWriter, request *http.Request) {
 }
 
 // Finds customers whose names contain the given query.
-func find(query string) []Customer {
-	results := make([]Customer, 0)
+func find(query string) []Option {
+	results := make([]Option, 0)
 	for _, customer := range customers {
-		if strings.Contains(strings.ToLower(customer.FullName), strings.ToLower(query)) {
-			results = append(results, customer)
+		matches := strings.Contains(strings.ToLower(customer.FullName), strings.ToLower(query))
+		if query == "" || matches {
+			results = append(results, Option{customer.Id, customer.FullName})
 		}
 	}
 	return results
@@ -77,18 +83,13 @@ func find(query string) []Customer {
 // Serves the list of customers.
 func options(response http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query().Get("filter")
-	var filteredCustomers []Customer
-	if (query == "") {
-		filteredCustomers = customers
-	} else {
-		filteredCustomers = find(query)
-	}
-	json, _ := json.MarshalIndent(&filteredCustomers, "", "  ")
+	var options = find(query)
+	json, _ := json.MarshalIndent(&options, "", "  ")
 	response.Header().Set("Content-Type", "application/json")
 	response.Write(json)
 }
 
-func descriptor(response http.ResponseWriter, request *http.Request)  {
+func descriptor(response http.ResponseWriter, request *http.Request) {
 	http.ServeFile(response, request, "descriptor.json")
 }
 
