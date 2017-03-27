@@ -33,6 +33,25 @@ def get_options(kind):
 
     return json.dumps(options)
 
+@app.route("/<kind>/options/<id>")
+def get_options(kind, id):
+    if kind not in data:
+        abort(404)
+
+        return
+
+    options = data[kind]
+
+    if id not in options:
+        abort(404)
+
+        return
+
+    entry = options[id]
+
+    return json.dumps({ "id": entry["id"], "name": entry["fullName"] })
+
+
 @app.route("/<kind>/<id>")
 def get_entry(kind, id):
     if kind not in data:
