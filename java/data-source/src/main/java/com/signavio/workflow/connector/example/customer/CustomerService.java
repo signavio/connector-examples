@@ -49,4 +49,12 @@ public class CustomerService {
       .map(CustomerOption::new)
       .collect(Collectors.toList());
   }
+
+  public CustomerOption getCustomerOption(String id) {
+    if (id != null) {
+      Customer customer = customers.get(id);
+      return customer != null ? new CustomerOption(customer) : null;
+    }
+    return null;
+  }
 }

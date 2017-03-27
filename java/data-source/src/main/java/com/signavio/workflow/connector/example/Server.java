@@ -1,7 +1,6 @@
 package com.signavio.workflow.connector.example;
 
-import com.signavio.workflow.connector.example.customer.Customer;
-import com.signavio.workflow.connector.example.customer.CustomerService;
+import com.signavio.workflow.connector.example.customer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
@@ -44,6 +43,17 @@ public class Server {
     get("/customer/options", (req, res) -> {
       String filter = req.queryParams("filter");
       return customerService.getCustomerOptions(filter);
+    }, responseTransformer);
+
+    get("/customer/options/:id", (req, res) -> {
+      String id = req.params("id");
+      LOGGER.info("Fetching customer option with id: " + id);
+      CustomerOption option = customerService.getCustomerOption(id);
+      if (option == null) {
+        LOGGER.info("Did not find option.");
+        throw new NotFoundException();
+      }
+      return option;
     }, responseTransformer);
 
     get("/customer/:id", (req, res) -> {
