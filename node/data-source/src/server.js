@@ -30,6 +30,26 @@ app.get("/:type/options", function(req, res) {
     }));
 });
 
+app.get("/:type/options/:id", function(req, res) {
+    const type = req.params.type
+    const id = req.params.type
+
+    if(!data[type]) {
+        return res.status(404).send();
+    }
+
+    const resource = data[type][id];
+
+    if(!resource) {
+        return res.status(404).send();
+    }
+
+    res.json({
+        id: resource.id,
+        name: resource.fullName,
+    }));
+})
+
 app.get("/:type/:id", function(req, res) {
     const type = req.params.type;
     const id = req.params.id;
