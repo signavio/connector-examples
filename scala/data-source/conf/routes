@@ -1,3 +1,4 @@
-GET /                   controllers.Application.descriptor
-GET /customer/options   controllers.Application.customerOptions(filter: Option[String])
-GET /customer/:id       controllers.Application.customer(id: String)
+GET /                       controllers.Application.descriptor
+GET /customer/options/:id   controllers.Application.customerOption(id: String)
+GET /customer/options       controllers.Application.customerOptions(filter: Option[String])
+GET /customer/:id           controllers.Application.customer(id: String)
