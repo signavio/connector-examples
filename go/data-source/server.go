@@ -89,6 +89,20 @@ func options(response http.ResponseWriter, request *http.Request) {
 	response.Write(json)
 }
 
+// Serves a single customer option.
+func option(response http.ResponseWriter, request *http.Request) {
+	id := strings.TrimPrefix(request.URL.Path, "/customer/options/")
+	customer, found := findOne(id)
+	if found {
+		var option = Option{customer.Id, customer.FullName}
+		json, _ := json.MarshalIndent(option, "", "  ")
+		response.Header().Set("Content-Type", "application/json")
+		response.Write(json)
+	} else {
+		response.WriteHeader(404) // Not Found
+	}
+}
+
 func descriptor(response http.ResponseWriter, request *http.Request) {
 	http.ServeFile(response, request, "descriptor.json")
 }
@@ -97,6 +111,7 @@ func descriptor(response http.ResponseWriter, request *http.Request) {
 func main() {
 	load();
 	http.HandleFunc("/", descriptor)
+	http.HandleFunc("/customer/options/", option)
 	http.HandleFunc("/customer/options", options)
 	http.HandleFunc("/customer/", customer)
 	println("Listening on " + address)
