@@ -34,7 +34,7 @@ def get_options(kind):
     return json.dumps(options)
 
 @app.route("/<kind>/options/<id>")
-def get_options(kind, id):
+def get_option(kind, id):
     if kind not in data:
         abort(404)
 
