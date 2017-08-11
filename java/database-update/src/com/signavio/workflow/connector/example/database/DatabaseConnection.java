@@ -24,18 +24,19 @@ class DatabaseConnection {
     try {
       connect();
     } catch (SQLException exception) {
-      log(exception);
+      System.err.println("SQL error: " + exception.getMessage());
     }
     try (Statement statement = connection.createStatement()) {
       System.out.println("SQL: " + sql);
       int updatedRowCount = statement.executeUpdate(sql);
       System.out.println(String.format("Updated %d rows", updatedRowCount));
     } catch (SQLException exception) {
-      log(exception);
+      System.err.println("SQL error: " + exception.getMessage());
     }
   }
 
-  private void log(SQLException exception) {
-    System.err.println("SQL error: " + exception.getMessage());
+  public PreparedStatement prepareStatement(final String sql) throws SQLException {
+    connect();
+    return connection.prepareStatement(sql);
   }
 }
