@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Connects to a database and executes SQL insert/update statements.
  *
- * Set the database.uri system property to use a database other than the default.
+ * Set the JDBC_DATABASE_URL environment variable to use a database other than the default.
  */
 class DatabaseConnection {
 
