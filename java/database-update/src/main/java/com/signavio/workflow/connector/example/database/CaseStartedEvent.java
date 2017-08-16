@@ -18,16 +18,12 @@ public class CaseStartedEvent {
     this.caseId = caseId;
   }
 
-  void save() {
+  void save() throws SQLException {
     final String insertStatement = "insert into case_event(case_id, type, created) values(?, ?, ?)";
-    try {
-      PreparedStatement preparedStatement = database.prepareStatement(insertStatement);
-      preparedStatement.setString(1, caseId);
-      preparedStatement.setString(2, "started");
-      preparedStatement.setTimestamp(3, new Timestamp(new Date().getTime()));
-      preparedStatement.executeUpdate();
-    } catch (SQLException exception) {
-      System.err.println("SQL error: " + exception.getMessage());
-    }
+    PreparedStatement preparedStatement = database.prepareStatement(insertStatement);
+    preparedStatement.setString(1, caseId);
+    preparedStatement.setString(2, "started");
+    preparedStatement.setTimestamp(3, new Timestamp(new Date().getTime()));
+    preparedStatement.executeUpdate();
   }
 }

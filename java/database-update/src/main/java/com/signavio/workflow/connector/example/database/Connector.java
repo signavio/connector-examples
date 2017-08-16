@@ -4,6 +4,7 @@ import spark.Request;
 import spark.Response;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static spark.Spark.post;
 
@@ -17,7 +18,6 @@ public class Connector {
   final static DatabaseConnection database = new DatabaseConnection();
 
   public static void main(String[] args) {
-    new CaseEventTable().create(database);
     post("/:case", Connector::saveCreateStartedEvent);
   }
 
@@ -26,8 +26,12 @@ public class Connector {
 
     System.out.println(String.format("HTTP %s %s", request.requestMethod(), request.uri()));
     final String caseId = request.params(":case");
-    new CaseStartedEvent(database, caseId).save();
-    response.status(201);
-    return "";
+    try {
+      new CaseStartedEvent(database, caseId).save();
+      return "";
+    } catch (SQLException e) {
+      response.status(500);
+      return e.getMessage();
+    }
   }
 }
