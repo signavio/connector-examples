@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * An event that records a workflow case having started.
  */
-public class CaseStartedEvent {
+class CaseStartedEvent {
 
   private final DatabaseConnection database;
   private final String caseId;

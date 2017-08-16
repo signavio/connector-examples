@@ -35,6 +35,24 @@ connector-# \i src/main/sql/create-table.postgresql.sql
 
 To use a database other than MySQL, add its JDBC driver as a Maven dependency in `pom.xml`.
 
+## Installation (Heroku/PostgreSQL)
+
+To install on Heroku, using a default PostgreSQL database:
+
+1. Copy this `database-update` directory somewhere else that isn’t in a git repository.
+1. Deploy the application to Heroku
+   ```
+   git init
+   git add .
+   git commit -m init
+   heroku create
+   git push heroku master
+   ```
+1. Create the table in the Heroku database
+   ```
+   heroku pg:psql < src/main/sql/create-table.postgresql.sql
+   ```
+
 ## Usage
 
 Use Maven to run the application locally, passing the database connection URI as a system property.

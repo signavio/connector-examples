@@ -9,33 +9,18 @@ import java.sql.*;
  */
 class DatabaseConnection {
 
-  public static final String DATABASE_URI = "jdbc:mysql://localhost/connector?user=connector&password=password";
+  private static final String DATABASE_URL = "jdbc:mysql://localhost/connector?user=connector&password=password";
   private Connection connection;
 
   private void connect() throws SQLException {
     if (connection != null) {
       return;
     }
-    final String databaseUri = System.getProperty("database.uri");
-    connection = DriverManager.getConnection(databaseUri == null ? DATABASE_URI : databaseUri);
+    final String databaseUrl = System.getenv().getOrDefault("JDBC_DATABASE_URL", DATABASE_URL);
+    connection = DriverManager.getConnection(databaseUrl);
   }
 
-  void executeUpdate(final String sql) {
-    try {
-      connect();
-    } catch (SQLException exception) {
-      System.err.println("SQL error: " + exception.getMessage());
-    }
-    try (Statement statement = connection.createStatement()) {
-      System.out.println("SQL: " + sql);
-      int updatedRowCount = statement.executeUpdate(sql);
-      System.out.println(String.format("Updated %d rows", updatedRowCount));
-    } catch (SQLException exception) {
-      System.err.println("SQL error: " + exception.getMessage());
-    }
-  }
-
-  public PreparedStatement prepareStatement(final String sql) throws SQLException {
+  PreparedStatement prepareStatement(final String sql) throws SQLException {
     connect();
     return connection.prepareStatement(sql);
   }

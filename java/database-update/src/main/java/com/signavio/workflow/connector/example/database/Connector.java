@@ -6,6 +6,7 @@ import spark.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static spark.Spark.port;
 import static spark.Spark.post;
 
 /**
@@ -16,8 +17,10 @@ import static spark.Spark.post;
 public class Connector {
 
   final static DatabaseConnection database = new DatabaseConnection();
+  final static Integer httpPort = Integer.valueOf(System.getenv().getOrDefault("PORT", "4567"));
 
   public static void main(String[] args) {
+    port(httpPort);
     post("/:case", Connector::saveCreateStartedEvent);
   }
 
@@ -28,6 +31,7 @@ public class Connector {
     final String caseId = request.params(":case");
     try {
       new CaseStartedEvent(database, caseId).save();
+      response.status(201);
       return "";
     } catch (SQLException e) {
       response.status(500);
