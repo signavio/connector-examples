@@ -20,9 +20,9 @@ mysql> use connector
 mysql> source src/main/sql/create-table.mysql.sql
 ```
 
-Use Maven to run the application locally, passing the database connection URI as a system property.
+Set an environment variable to the database connection URI.
 
-    mvn compile exec:java -Ddatabase.uri="jdbc:mysql://localhost/connector?user=connector&password=password"
+    export JDBC_DATABASE_URL="jdbc:mysql://localhost/connector?user=connector&password=password"
 
 ## Installation (PostgreSQL)
 
@@ -37,17 +37,17 @@ template1-# \c connector connector
 connector-# \i src/main/sql/create-table.postgresql.sql
 ```
 
-Use Maven to run the application locally, passing the database connection URI as a system property.
+Set an environment variable to the database connection URI.
 
-    mvn compile exec:java -Ddatabase.uri="jdbc:postgresql://localhost/connector?user=connector&password=password"
+    export JDBC_DATABASE_URL="jdbc:postgresql://localhost/connector?user=connector&password=password"
 
-To use a database other than MySQL, add its JDBC driver as a Maven dependency in `pom.xml`.
+To use a database other than MySQL or PostgreSQL, add its JDBC driver as a Maven dependency in `pom.xml`, and change the URL environment variable accordingly.
 
 ## Installation (Heroku/PostgreSQL)
 
 To install on Heroku, using a default PostgreSQL database:
 
-1. Copy this `database-update` directory somewhere else that isn’t in a git repository.
+1. Copy this `database-update` directory somewhere else that isn’t in a git repository, to avoid trying to deploy this whole `connector-examples` repository.
 1. Deploy the application to Heroku
    ```
    git init
@@ -62,6 +62,10 @@ To install on Heroku, using a default PostgreSQL database:
    ```
 
 ## Usage
+
+Run the application:
+
+    java -jar target/connector-examples-database-update-1.0-SNAPSHOT.jar
 
 Send a case event in an HTTP POST request, e.g. using [HTTPie](https://httpie.org/) on the command line:
 
