@@ -3,6 +3,7 @@ A web service that inserts workflow case events into a database.
 
 ## Pre-requisites
 
+* git
 * MySQL
 * JDK 8
 * Apache Maven
@@ -48,22 +49,25 @@ To use a database other than MySQL or PostgreSQL, add its JDBC driver as a Maven
 To install on Heroku, using a default PostgreSQL database:
 
 1. Copy this `database-update` directory somewhere else that isn’t in a git repository, to avoid trying to deploy this whole `connector-examples` repository.
-1. Deploy the application to Heroku
+1. Initialise a git repository to deploy to Heroku
    ```
    git init
    git add .
    git commit -m init
+   ```
+1. Deploy the application to Heroku
+   ```
    heroku create
    git push heroku master
    ```
-1. Create the table in the Heroku database
+1. Create the table in the Heroku PostgreSQL database
    ```
    heroku pg:psql < src/main/sql/create-table.postgresql.sql
    ```
 
 ## Usage
 
-Run the application:
+Run the application (configured by the `Procfile` for Heroku):
 
     java -jar target/connector-examples-database-update-1.0-SNAPSHOT.jar
 
