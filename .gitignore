@@ -2,3 +2,4 @@ node_modules
 .idea
 target
 *.iml
+.DS_Store
