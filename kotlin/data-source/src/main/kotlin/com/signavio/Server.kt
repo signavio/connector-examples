@@ -8,8 +8,10 @@ import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
+import io.ktor.features.StatusPages
 import io.ktor.jackson.*
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.Routing
@@ -17,6 +19,8 @@ import io.ktor.routing.get
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.*
+
+data class ErrorResponse(val message: String)
 
 /**
  * @author Christian Wiggert
@@ -34,6 +38,14 @@ fun Application.module() {
       configure(SerializationFeature.INDENT_OUTPUT, true)
     }
   }
+  install(StatusPages) {
+    exception<NotFoundException> {
+      call.respond(HttpStatusCode.NotFound, ErrorResponse(it.message))
+    }
+    exception<BadRequestException> {
+      call.respond(HttpStatusCode.BadRequest, ErrorResponse(it.message))
+    }
+  }
   install(Routing) {
     get("/") {
       call.respondText(descriptor, ContentType.Application.Json)
@@ -47,13 +59,14 @@ fun Application.module() {
       }
     }
     get("/customers/options/{id}") {
-      call.respond(store.options())
+      val id = call.parameters["id"] ?: throw BadRequestException("No valid ID was provided.")
+      val option = store.optionById(id) ?: throw NotFoundException("The customer with ID '$id' does not exist.")
+      call.respond(option)
     }
     get("/customers/{id}") {
-      val id = call.parameters["id"]
-      if (id != null) {
-        call.respond(store.byId(id))
-      }
+      val id = call.parameters["id"] ?: throw BadRequestException("No valid ID was provided.")
+      val customer = store.byId(id) ?: throw NotFoundException("The customer with ID '$id' does not exist.")
+      call.respond(customer)
     }
 
   }

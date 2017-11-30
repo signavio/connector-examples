@@ -5,6 +5,7 @@ import org.junit.Test
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
 
 /**
  * @author Christian Wiggert
@@ -36,7 +37,7 @@ class CustomerStoreTest {
   fun testById() {
     val ben = store.byId("4d5e6f")
 
-    assertEquals("Ben Brown", ben.fullName)
+    assertEquals("Ben Brown", ben!!.fullName)
     assertEquals("ben@example.org", ben.email)
     assertEquals(SubscriptType.GOLD, ben.subscriptionType)
     assertEquals(10, ben.discount)
@@ -45,9 +46,7 @@ class CustomerStoreTest {
 
   @Test
   fun testByIdWithoutMatch() {
-    assertFailsWith<NoSuchElementException> {
-      store.byId("unknown")
-    }
+    assertNull(store.byId("unknown"))
   }
 
   @Test
@@ -83,14 +82,12 @@ class CustomerStoreTest {
   fun testOptionById() {
     val option = store.optionById("4d5e6f")
 
-    assertEquals("4d5e6f", option.id)
+    assertEquals("4d5e6f", option!!.id)
     assertEquals("Ben Brown", option.name)
   }
 
   @Test
   fun testOptionWithoutMatchingId() {
-    assertFailsWith<NoSuchElementException> {
-      store.optionById("unknown")
-    }
+    assertNull(store.optionById("unknown"))
   }
 }

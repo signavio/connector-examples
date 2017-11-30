@@ -38,7 +38,7 @@ class CustomerStore(private val customers: List<Customer>) {
 
   fun all(): List<Customer> = customers
 
-  fun byId(id: String): Customer = customers.first { id == it.id }
+  fun byId(id: String): Customer? = customers.firstOrNull { id == it.id }
 
   fun options(): List<Option> = customers.map { Option(it.id, it.fullName) }
 
@@ -46,8 +46,9 @@ class CustomerStore(private val customers: List<Customer>) {
         .filter { it.fullName.contains(filter, true) }
         .map { Option(it.id, it.fullName) }
 
-  fun optionById(id: String): Option {
+  fun optionById(id: String): Option? {
     val customer = byId(id)
-    return Option(customer.id, customer.fullName)
+
+    return if (customer != null) Option(customer.id, customer.fullName) else null
   }
 }
