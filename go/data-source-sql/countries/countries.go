@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"strings"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/signavio/connector-examples/go/data-source-sql/configuration"
 )
 
 var databaseDriver = "mysql"
@@ -23,17 +24,16 @@ type Country struct {
 	Name string `json:"name"`
 }
 
-
 // Connect to the database.
-func NewCountries() (*Countries) {
+func NewCountries(configuration configuration.Configuration) (*Countries) {
   countries := Countries{}
-  countries.db = Database()
+  countries.db = Database(configuration)
   return &countries
 }
 
 // Connects to the database and tests the connection
-func Database() *sql.DB {
-	db, err := sql.Open(databaseDriver, databaseUrl)
+func Database(configuration configuration.Configuration) *sql.DB {
+	db, err := sql.Open(configuration.DatabaseDriver, configuration.DatabaseUrl)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

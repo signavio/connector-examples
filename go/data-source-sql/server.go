@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"github.com/signavio/connector-examples/go/data-source-sql/configuration"
 	"github.com/signavio/connector-examples/go/data-source-sql/countries"
 )
 
@@ -53,8 +54,8 @@ func Descriptor(response http.ResponseWriter, request *http.Request) {
 
 // Serves a connector over HTTP.
 func main() {
-	countriesDatabase = countries.NewCountries()
-
+  configuration := configuration.Load("./configuration.json")
+	countriesDatabase = countries.NewCountries(configuration)
 	http.HandleFunc("/", Descriptor)
 	http.HandleFunc("/country/options/", ServeOption)
 	http.HandleFunc("/country/options", ServeOptions)

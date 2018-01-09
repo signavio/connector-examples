@@ -1,0 +1,4 @@
+{
+  "database_driver": "mysql",
+  "database_url": "cldr:cldr@tcp(127.0.0.1:3306)/cldr"
+}
