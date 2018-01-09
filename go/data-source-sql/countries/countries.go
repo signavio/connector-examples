@@ -1,4 +1,6 @@
-package main
+package countries
+
+// Access to a database of country names.
 
 import (
 	"fmt"
