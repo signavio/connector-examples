@@ -1,0 +1,30 @@
+{
+  "key": "countries",
+  "name": "Countries",
+  "description": "A list of countries.",
+  "typeDescriptors": [
+    {
+      "key" : "country",
+      "name" : "Country",
+      "fields" : [
+        {
+          "key" : "code",
+          "name" : "Code",
+          "type" : {
+            "name" : "text"
+          }
+        }, {
+          "key" : "name",
+          "name" : "Name",
+          "type" : {
+            "name" : "text"
+          }
+        }
+      ],
+      "optionsAvailable" : true,
+      "fetchOneAvailable" : true
+    }
+  ],
+  "version": 1,
+  "protocolVersion": 1
+}
