@@ -13,39 +13,43 @@ import (
 )
 
 var address = ":9000"
+var databaseDriver = "mysql"
+var databaseUrl = "cldr:cldr@tcp(127.0.0.1:3306)/cldr"
+var db *sql.DB
 
+// Option JSON type required by the connector API.
 type Option struct {
-	Code string `json:"code"`
+	Code string `json:"id"`
 	Name string `json:"name"`
 }
 
 // Connects to the database and tests the connection
-func database() (*sql.DB) {
-	db, err := sql.Open("mysql", "cldr:cldr@tcp(127.0.0.1:3306)/cldr")
+func database() *sql.DB {
+	db, err := sql.Open(databaseDriver, databaseUrl)
 	if err != nil {
-		panic(err.Error())
+		log.Fatal(err.Error())
 	}
+	if err = db.Ping(); err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Print("Connected to database")
 	return db
 }
 
 // Finds a country by code.
 func findOne(code string) (Option, bool) {
-	db := database()
-	defer db.Close()
-
 	var country Option
 	sql := "select code, name from countries where code = ?"
 	err := db.QueryRow(sql, code).Scan(&country.Code, &country.Name)
 	if err != nil {
-		log.Fatal(err)
-	  return Option{}, false
+		log.Print(err)
+		return Option{}, false
 	}
 	return country, true
 }
 
 // Serves a single country.
 func country(response http.ResponseWriter, request *http.Request) {
-  log.Printf("%v %v\n", request.Method, request.URL.Path)
 	code := strings.TrimPrefix(request.URL.Path, "/country/")
 	country, found := findOne(code)
 	if found {
@@ -60,7 +64,6 @@ func country(response http.ResponseWriter, request *http.Request) {
 // Finds countries whose names contain the given query.
 func find(query string) []Option {
 	sql := "select code, name from countries where '' = ? || lower(name) like ? order by name"
-	db := database()
 	results, err := db.Query(sql, query, fmt.Sprintf("%%%v%%", strings.ToLower(query)))
 	if err != nil {
 		panic(err.Error())
@@ -74,8 +77,6 @@ func find(query string) []Option {
 		if err != nil {
 			panic(err.Error())
 		}
-
-		fmt.Printf("%v %v\n", country.Code, country.Name)
 		countries = append(countries, country)
 	}
 
@@ -96,8 +97,7 @@ func option(response http.ResponseWriter, request *http.Request) {
 	code := strings.TrimPrefix(request.URL.Path, "/country/options/")
 	country, found := findOne(code)
 	if found {
-		var option = Option{country.Code, country.Name}
-		json, _ := json.MarshalIndent(option, "", "  ")
+		json, _ := json.MarshalIndent(country, "", "  ")
 		response.Header().Set("Content-Type", "application/json")
 		response.Write(json)
 	} else {
@@ -111,10 +111,11 @@ func descriptor(response http.ResponseWriter, request *http.Request) {
 
 // Serves a connector over HTTP.
 func main() {
+	db = database()
+
 	http.HandleFunc("/", descriptor)
 	http.HandleFunc("/country/options/", option)
 	http.HandleFunc("/country/options", options)
-	http.HandleFunc("/country/", country)
 	println("Listening on " + address)
 	panic(http.ListenAndServe(address, nil))
 }

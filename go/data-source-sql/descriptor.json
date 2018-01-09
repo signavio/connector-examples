@@ -22,7 +22,7 @@
         }
       ],
       "optionsAvailable" : true,
-      "fetchOneAvailable" : true
+      "fetchOneAvailable" : false
     }
   ],
   "version": 1,
