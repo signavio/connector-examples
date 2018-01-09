@@ -17,6 +17,13 @@ type Countries struct {
   db *sql.DB
 }
 
+// JSON type required by the connector API.
+type Country struct {
+	Code string `json:"id"`
+	Name string `json:"name"`
+}
+
+
 // Connect to the database.
 func NewCountries() (*Countries) {
   countries := Countries{}
@@ -38,21 +45,21 @@ func Database() *sql.DB {
 }
 
 // Finds a country by code.
-func (c Countries) FindOne(code string) (Option, bool) {
-	var country Option
+func (c Countries) FindOne(code string) (Country, bool) {
+	var country Country
 	if c.db == nil {
 	  log.Fatal("No database")
 	}
 	err := c.db.QueryRow("select code, name from countries where code = ?", code).Scan(&country.Code, &country.Name)
 	if err != nil {
 		log.Print(err)
-		return Option{}, false
+		return Country{}, false
 	}
 	return country, true
 }
 
 // Finds countries whose names contain the given query.
-func (c Countries) Find(query string) []Option {
+func (c Countries) Find(query string) []Country {
 	sql := "select code, name from countries where '' = ? || lower(name) like ? order by name"
 	results, err := c.db.Query(sql, query, fmt.Sprintf("%%%v%%", strings.ToLower(query)))
 	if err != nil {
@@ -60,9 +67,9 @@ func (c Countries) Find(query string) []Option {
 	}
 	defer results.Close()
 
-	var countries []Option
+	var countries []Country
 	for results.Next() {
-		var country Option
+		var country Country
 		err = results.Scan(&country.Code, &country.Name)
 		if err != nil {
 			panic(err.Error())

@@ -10,18 +10,12 @@ import (
 )
 
 var address = ":9000"
-var countries *Countries
-
-// Option JSON type required by the connector API.
-type Option struct {
-	Code string `json:"id"`
-	Name string `json:"name"`
-}
+var countriesDatabase *countries.Countries
 
 // Serves a single country.
 func country(response http.ResponseWriter, request *http.Request) {
 	code := strings.TrimPrefix(request.URL.Path, "/country/")
-	country, found := countries.FindOne(code)
+	country, found := countriesDatabase.FindOne(code)
 	if found {
 		json, _ := json.MarshalIndent(country, "", "  ")
 		response.Header().Set("Content-Type", "application/json")
@@ -34,7 +28,7 @@ func country(response http.ResponseWriter, request *http.Request) {
 // Serves the list of countries.
 func ServeOptions(response http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query().Get("filter")
-	var options = countries.Find(query)
+	var options = countriesDatabase.Find(query)
 	json, _ := json.MarshalIndent(&options, "", "  ")
 	response.Header().Set("Content-Type", "application/json")
 	response.Write(json)
@@ -43,7 +37,7 @@ func ServeOptions(response http.ResponseWriter, request *http.Request) {
 // Serves a single country option.
 func ServeOption(response http.ResponseWriter, request *http.Request) {
 	code := strings.TrimPrefix(request.URL.Path, "/country/options/")
-	country, found := countries.FindOne(code)
+	country, found := countriesDatabase.FindOne(code)
 	if found {
 		json, _ := json.MarshalIndent(country, "", "  ")
 		response.Header().Set("Content-Type", "application/json")
@@ -59,7 +53,7 @@ func Descriptor(response http.ResponseWriter, request *http.Request) {
 
 // Serves a connector over HTTP.
 func main() {
-	countries = NewCountries()
+	countriesDatabase = countries.NewCountries()
 
 	http.HandleFunc("/", Descriptor)
 	http.HandleFunc("/country/options/", ServeOption)
