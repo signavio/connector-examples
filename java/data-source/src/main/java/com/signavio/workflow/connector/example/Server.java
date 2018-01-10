@@ -46,13 +46,13 @@ public class Server {
 
     get("/customer/options", (request, response) -> {
       String filter = request.queryParams("filter");
-      return customerService.getCustomerOptions(filter);
+      return customerService.findOptions(filter);
     }, responseTransformer);
 
     get("/customer/options/:id", (request, response) -> {
       String id = request.params("id");
       LOGGER.info("Fetching customer option with ID: " + id);
-      CustomerOption option = customerService.getCustomerOption(id);
+      CustomerOption option = customerService.findOneOption(id);
       if (option == null) {
         LOGGER.info("Did not find option.");
         throw new NotFoundException();
@@ -63,7 +63,7 @@ public class Server {
     get("/customer/:id", (request, response) -> {
       String id = request.params("id");
       LOGGER.info("Fetching customer with ID: " + id);
-      Customer customer = customerService.getCustomer(id);
+      Customer customer = customerService.find(id);
       if (customer == null) {
         LOGGER.info("Did not find customer.");
         throw new NotFoundException();

@@ -37,7 +37,7 @@ public class CustomerService {
   /**
    * Returns a complete customer record.
    */
-  public Customer getCustomer(String id) {
+  public Customer find(String id) {
     if (id != null) {
       return customers.get(id);
     }
@@ -47,7 +47,7 @@ public class CustomerService {
   /**
    * Returns a list of customer options, matching the filter (if specified).
    */
-  public List<CustomerOption> getCustomerOptions(String filter) {
+  public List<CustomerOption> findOptions(String filter) {
     if (filter != null && !filter.isEmpty()) {
       return customers.values().stream()
         .filter(customer -> customer.getFullName().toLowerCase().contains(filter.toLowerCase()))
@@ -62,7 +62,7 @@ public class CustomerService {
   /**
    * Returns a single customer option.
    */
-  public CustomerOption getCustomerOption(String id) {
+  public CustomerOption findOneOption(String id) {
     if (id != null) {
       Customer customer = customers.get(id);
       return customer != null ? new CustomerOption(customer) : null;
