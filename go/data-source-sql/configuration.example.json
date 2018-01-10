@@ -1,4 +1,4 @@
 {
   "database_driver": "mysql",
-  "database_url": "cldr:cldr@tcp(127.0.0.1:3306)/cldr"
+  "database_url": "database_user:database_password@tcp(127.0.0.1:3306)/database_name"
 }
