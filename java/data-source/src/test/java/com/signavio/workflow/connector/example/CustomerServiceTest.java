@@ -20,7 +20,7 @@ public class CustomerServiceTest {
 
     service.loadData("data.json");
 
-    Customer customer = service.getCustomer("1a2b3c");
+    Customer customer = service.find("1a2b3c");
     assertNotNull(customer);
     assertEquals("1a2b3c", customer.getId());
     assertEquals("Alice Allgood", customer.getFullName());
@@ -32,7 +32,7 @@ public class CustomerServiceTest {
 
     service.loadData("data.json");
 
-    List<CustomerOption> options = service.getCustomerOptions("be");
+    List<CustomerOption> options = service.findOptions("be");
     assertEquals(1, options.size());
     assertEquals("4d5e6f", options.get(0).getId());
     assertEquals("Ben Brown", options.get(0).getName());
