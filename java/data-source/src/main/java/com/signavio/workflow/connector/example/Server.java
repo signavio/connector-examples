@@ -1,6 +1,8 @@
 package com.signavio.workflow.connector.example;
 
-import com.signavio.workflow.connector.example.customer.*;
+import com.signavio.workflow.connector.example.customer.Customer;
+import com.signavio.workflow.connector.example.customer.CustomerOption;
+import com.signavio.workflow.connector.example.customer.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
@@ -22,14 +24,14 @@ public class Server {
    */
   private static int PORT = 5000;
 
-  public static void main( String[] args ) {
+  public static void main(String[] arguments) {
     CustomerService customerService = new CustomerService();
     final String descriptor;
     try {
       customerService.loadData("data.json");
       descriptor = IOUtils.toString(Server.class.getClassLoader().getResourceAsStream("descriptor.json"));
-    } catch (IOException e) {
-      LOGGER.error("Couldn't initialize the data.", e);
+    } catch (IOException exception) {
+      LOGGER.error("Couldn't initialize the data.", exception);
       return;
     }
 
@@ -40,16 +42,16 @@ public class Server {
 
     // Request handlers
 
-    get("/", (req, res) -> descriptor );
+    get("/", (request, response) -> descriptor);
 
-    get("/customer/options", (req, res) -> {
-      String filter = req.queryParams("filter");
+    get("/customer/options", (request, response) -> {
+      String filter = request.queryParams("filter");
       return customerService.getCustomerOptions(filter);
     }, responseTransformer);
 
-    get("/customer/options/:id", (req, res) -> {
-      String id = req.params("id");
-      LOGGER.info("Fetching customer option with id: " + id);
+    get("/customer/options/:id", (request, response) -> {
+      String id = request.params("id");
+      LOGGER.info("Fetching customer option with ID: " + id);
       CustomerOption option = customerService.getCustomerOption(id);
       if (option == null) {
         LOGGER.info("Did not find option.");
@@ -58,9 +60,9 @@ public class Server {
       return option;
     }, responseTransformer);
 
-    get("/customer/:id", (req, res) -> {
-      String id = req.params("id");
-      LOGGER.info("Fetching customer with id: " + id);
+    get("/customer/:id", (request, response) -> {
+      String id = request.params("id");
+      LOGGER.info("Fetching customer with ID: " + id);
       Customer customer = customerService.getCustomer(id);
       if (customer == null) {
         LOGGER.info("Did not find customer.");
@@ -70,8 +72,8 @@ public class Server {
     }, responseTransformer);
 
     // Map a Java exception type to an HTTP response status.
-    exception(NotFoundException.class, (error, req, res) -> {
-      res.status(404);
+    exception(NotFoundException.class, (error, request, response) -> {
+      response.status(404);
     });
 
     // Define the response content type for all endpoints.
