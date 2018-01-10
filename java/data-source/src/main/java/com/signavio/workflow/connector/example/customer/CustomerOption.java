@@ -1,5 +1,8 @@
 package com.signavio.workflow.connector.example.customer;
 
+/**
+ * Java bean that serialises to the correct JSON for a connector option.
+ */
 public class CustomerOption {
 
   private String id;

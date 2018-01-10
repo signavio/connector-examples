@@ -18,7 +18,7 @@ public class Server {
   private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
   /**
-   * Defines the port the embedded jetty server will bind to.
+   * Defines the port the embedded HTTP server will bind to.
    */
   private static int PORT = 5000;
 
@@ -33,11 +33,13 @@ public class Server {
       return;
     }
 
-    // general server configuration
-    port(PORT);
+    // Server configuration
 
+    port(PORT);
     ResponseTransformer responseTransformer = new JsonTransformer();
-    // request handlers
+
+    // Request handlers
+
     get("/", (req, res) -> descriptor );
 
     get("/customer/options", (req, res) -> {
@@ -67,11 +69,12 @@ public class Server {
       return customer;
     }, responseTransformer);
 
+    // Map a Java exception type to an HTTP response status.
     exception(NotFoundException.class, (error, req, res) -> {
       res.status(404);
     });
 
-    // define the content type for every response
+    // Define the response content type for all endpoints.
     after((req, res) -> {
       res.type("application/json;charset=UTF-8");
     });

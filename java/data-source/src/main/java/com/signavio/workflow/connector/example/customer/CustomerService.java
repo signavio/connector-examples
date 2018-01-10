@@ -23,6 +23,9 @@ public class CustomerService {
 
   private Map<String, Customer> customers;
 
+  /**
+   * Loads static data from the data.json file.
+   */
   public void loadData(String resource) throws IOException {
     customers = new HashMap<>();
     Type listType = new TypeToken<ArrayList<Customer>>(){}.getType();
@@ -31,6 +34,9 @@ public class CustomerService {
     LOGGER.info(String.format("Loaded %s customer records.", customers.size()));
   }
 
+  /**
+   * Returns a complete customer record.
+   */
   public Customer getCustomer(String id) {
     if (id != null) {
       return customers.get(id);
@@ -38,6 +44,9 @@ public class CustomerService {
     return null;
   }
 
+  /**
+   * Returns a list of customer options, matching the filter (if specified).
+   */
   public List<CustomerOption> getCustomerOptions(String filter) {
     if (filter != null && !filter.isEmpty()) {
       return customers.values().stream()
@@ -50,6 +59,9 @@ public class CustomerService {
       .collect(Collectors.toList());
   }
 
+  /**
+   * Returns a single customer option.
+   */
   public CustomerOption getCustomerOption(String id) {
     if (id != null) {
       Customer customer = customers.get(id);
