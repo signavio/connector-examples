@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * A basic customer record.
  */
+@SuppressWarnings("unused")
 public class Customer {
 
   private String id;
