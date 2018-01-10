@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 	"github.com/signavio/connector-examples/go/data-source-sql/configuration"
@@ -59,6 +60,6 @@ func main() {
 	http.HandleFunc("/", Descriptor)
 	http.HandleFunc("/country/options/", ServeOption)
 	http.HandleFunc("/country/options", ServeOptions)
-	println("Listening on " + address)
-	panic(http.ListenAndServe(address, nil))
+	log.Print("Listening on " + address)
+	log.Fatal(http.ListenAndServe(address, nil))
 }

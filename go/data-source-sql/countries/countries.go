@@ -63,7 +63,7 @@ func (c Countries) Find(query string) []Country {
 	sql := "select code, name from countries where '' = ? || lower(name) like ? order by name"
 	results, err := c.db.Query(sql, query, fmt.Sprintf("%%%v%%", strings.ToLower(query)))
 	if err != nil {
-		panic(err.Error())
+		log.Fatal(err.Error())
 	}
 	defer results.Close()
 
@@ -72,7 +72,7 @@ func (c Countries) Find(query string) []Country {
 		var country Country
 		err = results.Scan(&country.Code, &country.Name)
 		if err != nil {
-			panic(err.Error())
+			log.Fatal(err.Error())
 		}
 		countries = append(countries, country)
 	}
