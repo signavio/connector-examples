@@ -37,7 +37,7 @@ Clone this repository.
 
         create database database_name
         create user 'database_user'@'localhost' identified by 'database_password';
-        grant select on cldr.* to 'cldr'@'localhost';
+        grant select on database_name.* to 'database_user'@'localhost';
 2. Run the `create-database.sql` script to populate a database:
 
         mysql -u root
