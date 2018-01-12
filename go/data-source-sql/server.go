@@ -17,8 +17,8 @@ var countriesDatabase *countries.Countries
 // Serves a single country.
 func country(response http.ResponseWriter, request *http.Request) {
 	code := strings.TrimPrefix(request.URL.Path, "/country/")
-	country, found := countriesDatabase.FindOne(code)
-	if found {
+	country, err := countriesDatabase.FindOne(code)
+	if err == nil {
 		json, _ := json.MarshalIndent(country, "", "  ")
 		response.Header().Set("Content-Type", "application/json")
 		response.Write(json)
@@ -30,7 +30,12 @@ func country(response http.ResponseWriter, request *http.Request) {
 // Serves the list of countries.
 func ServeOptions(response http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query().Get("filter")
-	var options = countriesDatabase.Find(query)
+	options, err := countriesDatabase.Find(query)
+	if err != nil {
+		log.Print(err)
+		response.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	json, _ := json.MarshalIndent(&options, "", "  ")
 	response.Header().Set("Content-Type", "application/json")
 	response.Write(json)
@@ -39,13 +44,13 @@ func ServeOptions(response http.ResponseWriter, request *http.Request) {
 // Serves a single country option.
 func ServeOption(response http.ResponseWriter, request *http.Request) {
 	code := strings.TrimPrefix(request.URL.Path, "/country/options/")
-	country, found := countriesDatabase.FindOne(code)
-	if found {
+	country, err := countriesDatabase.FindOne(code)
+	if err == nil {
 		json, _ := json.MarshalIndent(country, "", "  ")
 		response.Header().Set("Content-Type", "application/json")
 		response.Write(json)
 	} else {
-		response.WriteHeader(404) // Not Found
+		response.WriteHeader(http.StatusNotFound)
 	}
 }
 

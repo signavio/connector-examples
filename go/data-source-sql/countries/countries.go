@@ -45,37 +45,36 @@ func Database(configuration configuration.Configuration) *sql.DB {
 }
 
 // Finds a country by code.
-func (c Countries) FindOne(code string) (Country, bool) {
-	var country Country
+func (c Countries) FindOne(code string) (country Country, err error) {
 	if c.db == nil {
 	  log.Fatal("No database")
 	}
-	err := c.db.QueryRow("select code, name from countries where code = ?", code).Scan(&country.Code, &country.Name)
+	err = c.db.QueryRow("select code, name from countries where code = ?", code).Scan(&country.Code, &country.Name)
 	if err != nil {
 		log.Print(err)
-		return Country{}, false
+		return
 	}
-	return country, true
+	return
 }
 
 // Finds countries whose names contain the given query.
-func (c Countries) Find(query string) []Country {
-	sql := "select code, name from countries where '' = ? || lower(name) like ? order by name"
-	results, err := c.db.Query(sql, query, fmt.Sprintf("%%%v%%", strings.ToLower(query)))
+func (c Countries) Find(query string) (countries []Country, err error) {
+	querySql := "select code, name from countries where '' = ? || lower(name) like ? order by name"
+	var results *sql.Rows
+	results, err = c.db.Query(querySql, query, fmt.Sprintf("%%%v%%", strings.ToLower(query)))
 	if err != nil {
-		log.Fatal(err.Error())
+		return
 	}
 	defer results.Close()
 
-	var countries []Country
 	for results.Next() {
 		var country Country
 		err = results.Scan(&country.Code, &country.Name)
 		if err != nil {
-			log.Fatal(err.Error())
+			return
 		}
 		countries = append(countries, country)
 	}
 
-	return countries
+	return
 }
