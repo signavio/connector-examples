@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -24,6 +25,7 @@ func country(response http.ResponseWriter, request *http.Request) {
 		response.Write(json)
 	} else {
 		response.WriteHeader(404) // Not Found
+		fmt.Fprintf(response, err.Error())
 	}
 }
 
@@ -51,6 +53,7 @@ func ServeOption(response http.ResponseWriter, request *http.Request) {
 		response.Write(json)
 	} else {
 		response.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(response, err.Error())
 	}
 }
 

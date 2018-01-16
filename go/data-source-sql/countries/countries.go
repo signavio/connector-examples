@@ -24,6 +24,12 @@ type Country struct {
 	Name string `json:"name"`
 }
 
+type CountryCodeUndefined string
+
+func (code CountryCodeUndefined) Error() string {
+	return fmt.Sprintf("No country defined for code ‘%v’", string(code))
+}
+
 // Connect to the database.
 func NewCountries(configuration configuration.Configuration) (*Countries) {
   countries := Countries{}
@@ -51,7 +57,9 @@ func (c Countries) FindOne(code string) (country Country, err error) {
 	}
 	err = c.db.QueryRow("select code, name from countries where code = ?", code).Scan(&country.Code, &country.Name)
 	if err != nil {
-		log.Print(err)
+		if (err.Error() == "sql: no rows in result set") {
+			err = CountryCodeUndefined(code)
+		}
 		return
 	}
 	return
