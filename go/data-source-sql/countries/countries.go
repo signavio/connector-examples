@@ -57,8 +57,9 @@ func (c Countries) FindOne(code string) (country Country, err error) {
 	}
 	err = c.db.QueryRow("select code, name from countries where code = ?", code).Scan(&country.Code, &country.Name)
 	if err != nil {
-		if (err.Error() == "sql: no rows in result set") {
-			err = CountryCodeUndefined(code)
+		errNoRows, ok := err.(sql.ErrNoRows)
+		if ok {
+		  return c, CountryCodeUndefined(code)
 		}
 		return
 	}
