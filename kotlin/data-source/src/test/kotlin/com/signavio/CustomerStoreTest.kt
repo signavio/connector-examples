@@ -96,7 +96,7 @@ class CustomerStoreTest {
     val customer = Customer("1a2b3c", "Alice Allgood", "alice@example.org",
         SubscriptionType.BRONZE, 10, LocalDateTime.of(2012, 2, 14, 0, 0))
     val writer = StringWriter()
-    CustomerStore.mapper().writeValue(writer, customer)
+    jsonMapper().writeValue(writer, customer)
 
     val expected = """{
   "id" : "1a2b3c",

@@ -1,16 +1,7 @@
 package com.signavio
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 enum class SubscriptionType(private val value: String) {
   BRONZE("bronze"),
@@ -28,16 +19,9 @@ data class Option(val id: String, val name: String)
 class CustomerStore(private val customers: List<Customer>) {
 
   companion object {
-    fun mapper(): ObjectMapper = jacksonObjectMapper()
-        .registerModule(JavaTimeModule().)
-        .enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
-        .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
-        .configure(SerializationFeature.INDENT_OUTPUT, true)
-        .setDateFormat(SimpleDateFormat("yyyy-mm-dd'T'hh:MM:ss.SSS'Z'"))
-
     fun load(jsonFile: String): CustomerStore {
       val json = this.javaClass.getResourceAsStream(jsonFile).bufferedReader().use { it.readText() }
-      val customers = mapper().readValue<List<Customer>>(json)
+      val customers = jsonMapper().readValue<List<Customer>>(json)
       return CustomerStore(customers)
     }
   }
