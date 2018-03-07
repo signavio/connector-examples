@@ -1,0 +1,55 @@
+{
+  "key": "products",
+  "name": "Products",
+  "description": "A database with all products.",
+  "typeDescriptors": [
+    {
+      "key" : "product",
+      "name" : "Product",
+      "fields" : [
+        {
+          "key" : "name",
+          "name" : "Name",
+          "type" : {
+            "name" : "text"
+          }
+        }, {
+          "key" : "code",
+          "name" : "Product code",
+          "type" : {
+            "name" : "text"
+          }
+        }, {
+          "key" : "range",
+          "name" : "Product range",
+          "type" : {
+            "name" : "choice",
+            "options" : [
+                    {
+                            "id" : "bronze",
+                            "name" : "Bronze"
+                    }, {
+                            "id" : "silver",
+                            "name" : "Silver"
+                    }, {
+                            "id" : "gold",
+                            "name" : "Gold"
+                    }
+            ]
+          }
+        }, {
+          "key" : "added",
+          "name" : "Date added",
+          "type" : {
+            "name" : "date",
+            "kind" : "datetime"
+          }
+        }
+      ],
+      "optionsAvailable" : true,
+      "fetchOneAvailable" : true
+    }
+  ],
+  "version": 1,
+  "protocolVersion": 1
+}
