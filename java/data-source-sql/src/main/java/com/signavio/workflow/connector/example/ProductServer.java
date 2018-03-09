@@ -29,6 +29,13 @@ public class ProductServer {
 
   public static void main( String[] args ) {
     ProductService productService = new ProductService(database);
+    try {
+      LOGGER.info(String.format("Database with %d options available", productService.count()));
+    } catch (SQLException e) {
+      LOGGER.error("Database connection failed", e);
+      return;
+    }
+
     final String descriptor;
     try {
       InputStream resource = ProductServer.class.getClassLoader().getResourceAsStream("descriptor.json");
@@ -65,7 +72,7 @@ public class ProductServer {
       String id = req.params("id");
       LOGGER.info("Fetching product with ID: " + id);
       Product product = productService.getProduct(id);
-
+Http
       if (product == null) {
         LOGGER.info("Did not find product.");
         throw new NotFoundException();
