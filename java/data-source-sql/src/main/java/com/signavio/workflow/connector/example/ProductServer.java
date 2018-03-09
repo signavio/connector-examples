@@ -72,7 +72,7 @@ public class ProductServer {
       String id = req.params("id");
       LOGGER.info("Fetching product with ID: " + id);
       Product product = productService.getProduct(id);
-Http
+
       if (product == null) {
         LOGGER.info("Did not find product.");
         throw new NotFoundException();
