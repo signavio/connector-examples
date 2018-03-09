@@ -22,6 +22,14 @@ public class ProductService {
     this.database = database;
   }
 
+  public long count() throws SQLException {
+    final String query = "select count(1) from products";
+    PreparedStatement preparedStatement = database.prepareStatement(query);
+    ResultSet results = preparedStatement.executeQuery();
+    results.next();
+    return results.getLong(1);
+  }
+
   public Product getProduct(String id) throws SQLException {
     if (id != null) {
       final String query = "select * from products where id=?";

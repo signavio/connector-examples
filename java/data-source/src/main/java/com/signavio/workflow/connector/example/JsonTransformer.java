@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 
 /**
- * Transforms our Pojos to JSON strings.
+ * Transforms our POJOs to JSON strings.
  */
 public class JsonTransformer implements ResponseTransformer {
 
@@ -27,7 +27,7 @@ public class JsonTransformer implements ResponseTransformer {
 
   /**
    * This date adapter sets the timezone to UTC and transforms date objects to
-   * the required ISO 8601 format.
+   * the ISO 8601 format required for JSON.
    * <code>
    *   2012-02-14T19:32:00.000Z
    * </code>
