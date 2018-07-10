@@ -15,6 +15,8 @@ http get http://localhost:5000/customer/options
 http get 'http://localhost:5000/customer/options?filter=Alice'
 
 http get http://localhost:5000/customer/options/1a2b3c
+
+http get http://localhost:5000/customer/1a2b3c
 ```
 
 ## Installation
