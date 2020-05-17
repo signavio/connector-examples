@@ -1,0 +1,22 @@
+let typeDescriptor = {
+                       key : "countries"
+                       name : "Countries"
+                       description : "A list of world countries"
+                       typeDescriptors : [{
+                                            key : "country"
+                                            name : "Country"
+                                            recordType : "value"
+                                            fields : [{
+                                                        key : "id"
+                                                        name : "Country code"
+                                                        type : {
+                                                                 name : "text"
+                                                               }
+                                                      }]
+                                            optionsAvailable : true
+                                            fetchOneAvailable : false
+                                          }]
+                       version : 1
+                       protocolVersion : 1
+                     }
+Http::responseWithJson typeDescriptor 200
