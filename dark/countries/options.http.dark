@@ -1,0 +1,7 @@
+let _ = "GET /connector/country/options"
+
+match request.queryParams.filter
+  null -> Http::responseWithJson countries 200
+  query -> let filterMatches = \country -> String::startsWith country.name query
+           List::filterv2 countries filterMatches
+           |>Http::responseWithJson 200

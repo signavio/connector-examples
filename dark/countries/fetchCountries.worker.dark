@@ -1,0 +1,12 @@
+let countriesResult = HttpClient::getv5 "http://country.io/names.json" {} {}
+match countriesResult
+  Ok result -> result.body
+               |>Dict::toList
+               |>List::map
+                   \country -> DB::setv1
+                                 {
+                                   code : List::getAtv1 country 0
+                                   name : List::getAtv1 country 1
+                                 }
+                                 List::getAtv1 country 0
+                                 Countries

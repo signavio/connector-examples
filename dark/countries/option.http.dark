@@ -1,0 +1,10 @@
+let _ = "GET /connector/country/option/:code"
+
+let matches = \country -> Dict::getv2 country "id" == code
+match List::findFirstv2 countries matches
+  Nothing -> let codeError = {
+                               error : "Invalid country code"
+                               code : code
+                             }
+             Http::responseWithJson codeError 404
+  Just country -> Http::responseWithJson country 200

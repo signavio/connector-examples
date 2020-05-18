@@ -1,0 +1,6 @@
+DB::getAllv3 Countries
+|>List::map \country -> {
+                          id : country.code
+                          name : country.name
+                        }
+|>List::sortBy \country -> country.name

@@ -1,3 +1,5 @@
+let _ = "GET /connector"
+
 let typeDescriptor = {
                        key : "countries"
                        name : "Countries"
