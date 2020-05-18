@@ -1,4 +1,4 @@
-# Java examples
+# Dark examples
 
 This package provides examples for connectors written in [Dark](https://darklang.com).
 
